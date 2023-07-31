@@ -18,6 +18,7 @@ import userRouter from "./routes/users.router.js";
 import mailerRouter from "./routes/mailer.router.js";
 import smsRouter from "./routes/sms.router.js";
 import mockingproductsRouter from "./routes/mockingproducts.router.js";
+import logRouter from "./routes/logs.router.js";
 import __dirname, { passportAuthenticate } from "./utils.js";
 import initializePassport from "./config/passport.config.js";
 import { messageModel } from "./models/messageModel.js";
@@ -38,7 +39,7 @@ app.use(
         secret: config.SESSION_SECRET,
         resave: true,
         saveUninitialized: true,
-    })
+    }),
 );
 
 initializePassport();
@@ -54,10 +55,11 @@ app.use("/chat", passportAuthenticate("jwt"), chatRouter);
 app.use("/mail", passportAuthenticate("jwt"), mailerRouter);
 app.use("/sms", passportAuthenticate("jwt"), smsRouter);
 app.use("/mockingproducts", passportAuthenticate("jwt"), mockingproductsRouter);
+app.use("/loggerTest", passportAuthenticate("jwt"), logRouter);
 app.use(
     "/realtimeproducts",
     passportAuthenticate("jwt"),
-    realTimeProductsRouter
+    realTimeProductsRouter,
 );
 app.use(express.static(__dirname + "/public"));
 app.use(errorHandler);
