@@ -28,7 +28,6 @@ Swal.fire({
         ev.currentTarget.message.value = "";
     });
     socketClient.on("emitMessage", (newMessage) => {
-        console.log(newMessage.user, email.value, newMessage.user === email);
         const mymessage =
             email.value === newMessage.user ? "message mymessage" : "message";
         const innerHtml = `
@@ -44,7 +43,6 @@ Swal.fire({
         const newMessageDiv = document.createElement("div");
         newMessageDiv.setAttribute("class", mymessage);
         newMessageDiv.innerHTML = innerHtml;
-        console.log(innerHtml);
         document.querySelector("#chatbox").appendChild(newMessageDiv);
         document.querySelector("#chatbox").scroll({
             top: document.querySelector("#chatbox").scrollHeight,

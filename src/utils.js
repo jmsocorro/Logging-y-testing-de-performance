@@ -31,7 +31,7 @@ export const passportAuthenticate = (strategy) => {
     return async (req, res, next) => {
         passport.authenticate(strategy, function (error, user, info) {
             if (error) return next(error);
-            if (!user)
+            if (!user) {
                 return res.status(401).render("login", {
                     message: {
                         type: "error",
@@ -39,6 +39,7 @@ export const passportAuthenticate = (strategy) => {
                         text: info.text ? info.text : "Iniciá la sesión",
                     },
                 });
+            }
             req.user = user;
             next();
         })(req, res, next);

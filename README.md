@@ -12,7 +12,7 @@ http://localhost:8080/loggerTest/:el
 Crea un log para el nivel el
 Los niveles son debug, http, info, warning, error y fatal
 
-## Urls para agragar un producto
+## Urls para agregar un producto
 
 Debe estar logueado como usuario ADMIN
 

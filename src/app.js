@@ -23,10 +23,13 @@ import __dirname, { passportAuthenticate } from "./utils.js";
 import initializePassport from "./config/passport.config.js";
 import { messageModel } from "./models/messageModel.js";
 import errorHandler from "./controllers/errors/middleware.error.js";
+import { createLogger } from "./utils.js";
 
 mongoose.set("strictQuery", false);
 
 const app = express();
+const logger = createLogger();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -68,16 +71,16 @@ try {
     await mongoose.connect(config.MONGO_URL, {
         serverSelectionTimeoutMS: 5000,
     });
-    console.log("DB conected");
+    logger.debug(Date.now() + " / DB conected");
     const httpServer = app.listen(8080, () => {
-        console.log("Server UP");
+        logger.debug(Date.now() + " / Server UP");
     });
 
     const socketServer = new Server(httpServer);
 
     socketServer.on("connection", (socketClient) => {
         //const prod = new ProductManager("./src/data/productos.json");
-        console.log("User conected");
+        logger.info(Date.now() + " / User conected");
         socketClient.on("deleteProd", (prodId) => {
             const result = prod.deleteProduct(prodId);
             if (result.error) {
@@ -99,19 +102,19 @@ try {
         });
         socketClient.on("newMessage", async (message) => {
             try {
-                console.log(message);
+                logger.info(Date.now() + " / " + message);
                 let newMessage = await messageModel.create({
                     user: message.email.value,
                     message: message.message,
                 });
-                console.log("app", newMessage);
+                logger.info(Date.now() + " / ", newMessage);
                 socketServer.emit("emitMessage", newMessage);
             } catch (error) {
-                console.log(error);
+                logger.error(Date.now() + " / " + error);
                 socketClient.emit("error", error);
             }
         });
     });
 } catch (error) {
-    console.log(error);
+    logger.error(Date.now() + " / " + error);
 }
